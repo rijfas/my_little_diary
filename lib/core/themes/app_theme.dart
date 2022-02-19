@@ -7,6 +7,7 @@ class AppTheme {
   static const lightSecondaryColor = Color(0xFFEEEEF2);
   static const lightDisabledColor = Color(0xFFC8C9DE);
   static final lightTheme = ThemeData.light().copyWith(
+    primaryColor: lightPrimaryColor,
     scaffoldBackgroundColor: lightSecondaryColor,
     iconTheme: const IconThemeData(
       color: AppTheme.lightDisabledColor,
