@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_little_diary/core/themes/app_theme.dart';
+import 'package:my_little_diary/presentation/router/app_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -163,8 +164,9 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.lightPrimaryColor,
         child: const Icon(Icons.create),
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).pushNamed(AppRouter.diaryScreen),
       ),
     );
   }
