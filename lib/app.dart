@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_little_diary/core/themes/app_theme.dart';
 import 'package:my_little_diary/logic/diary/cubit/diary_cubit.dart';
 import 'package:my_little_diary/logic/entry/cubit/entry_cubit.dart';
+import 'package:my_little_diary/logic/entry_view/cubit/entry_view_cubit.dart';
 import 'package:my_little_diary/presentation/router/app_router.dart';
 
 class App extends StatelessWidget {
@@ -17,6 +18,9 @@ class App extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => EntryCubit(),
+        ),
+        BlocProvider(
+          create: (_) => EntryViewCubit(),
         ),
       ],
       child: MaterialApp(

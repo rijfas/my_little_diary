@@ -22,9 +22,8 @@ class EntryCubit extends Cubit<EntryState> {
     required String title,
     required String data,
   }) async {
-    // emit(EntryLoading());
+    emit(EntryCreateLoading());
     const uuid = Uuid();
-
     final entry = Entry(
       id: uuid.v1(),
       diaryId: diary.id,
@@ -34,7 +33,7 @@ class EntryCubit extends Cubit<EntryState> {
     );
 
     await _repository.addEntry(entry: entry);
-
-    loadEntries(diary: diary);
+    final entries = await _repository.getEntries(diaryId: diary.id);
+    emit(EntryLoaded(diary: diary, entries: entries));
   }
 }

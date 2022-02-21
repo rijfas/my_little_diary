@@ -8,12 +8,12 @@ class EntryRepository {
   }
 
   Future<List<Entry>> getEntries({required String diaryId}) async {
-    final entries = _entries.where((element) => element.id == diaryId).toList();
+    final entries =
+        _entries.where((element) => element.diaryId == diaryId).toList();
     return Future.delayed(const Duration(milliseconds: 100), () => entries);
   }
 
   Future<void> addEntry({required Entry entry}) async {
-    print(_entries);
     _entries.add(entry);
     return Future.delayed(const Duration(milliseconds: 100));
   }

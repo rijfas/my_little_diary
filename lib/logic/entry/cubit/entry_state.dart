@@ -22,3 +22,7 @@ class EntryLoaded extends EntryState {
     required List<Entry> entries,
   }) : super(diary: diary, entries: entries);
 }
+
+class EntryCreateLoading extends EntryState {}
+
+class EntryCreated extends EntryState {}

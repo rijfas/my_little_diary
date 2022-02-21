@@ -5,24 +5,24 @@ import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:my_little_diary/core/themes/app_theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_little_diary/logic/entry/cubit/entry_cubit.dart';
+import 'package:my_little_diary/logic/entry_view/cubit/entry_view_cubit.dart';
 import 'package:my_little_diary/presentation/router/app_router.dart';
 
-class EntryCreateScreen extends StatefulWidget {
-  const EntryCreateScreen({Key? key}) : super(key: key);
+class EntryViewScreen extends StatefulWidget {
+  const EntryViewScreen({Key? key}) : super(key: key);
 
   @override
-  State<EntryCreateScreen> createState() => _EntryCreateScreenState();
+  State<EntryViewScreen> createState() => _EntryViewScreenState();
 }
 
-class _EntryCreateScreenState extends State<EntryCreateScreen> {
+class _EntryViewScreenState extends State<EntryViewScreen> {
   late final QuillController _controller;
-  String _title = 'Saturday';
-  DateTime _date = DateTime.now();
   @override
   void initState() {
     super.initState();
+    final json = jsonDecode(context.read<EntryViewCubit>().state.entry!.data);
     _controller = QuillController(
-      document: Document(),
+      document: Document.fromJson(json),
       selection: const TextSelection.collapsed(offset: 0),
     );
   }
@@ -35,7 +35,8 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EntryCubit, EntryState>(builder: (context, state) {
+    return BlocBuilder<EntryViewCubit, EntryViewState>(
+        builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -56,14 +57,14 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _title,
+                          state.entry!.title,
                           style: TextStyle(
                               color: AppTheme.lightPrimaryColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 28.0),
                         ),
                         Text(
-                          _date.toString(),
+                          state.entry!.createdAt.toString(),
                           style: TextStyle(
                               color: AppTheme.lightDisabledColor,
                               fontWeight: FontWeight.bold,
@@ -73,36 +74,13 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      final data =
-                          jsonEncode(_controller.document.toDelta().toJson());
-                      context.read<EntryCubit>().createEntry(
-                            diary: state.diary!,
-                            title: _title,
-                            data: data,
-                          );
-                    },
-                    child: const Text('Save'),
+                    onPressed: () {},
+                    child: const Text('Edit'),
                   )
                 ],
               ),
             ),
             const SizedBox(height: 24.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: QuillToolbar.basic(
-                toolbarIconAlignment: WrapAlignment.center,
-                toolbarSectionSpacing: 1,
-                controller: _controller,
-                showCodeBlock: false,
-                showImageButton: false,
-                showRedo: false,
-                showUndo: false,
-                showVideoButton: false,
-                showLink: false,
-              ),
-            ),
-            const SizedBox(height: 16.0),
             Expanded(
                 child: Container(
               decoration: const BoxDecoration(
@@ -113,8 +91,16 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                 ),
               ),
               padding: const EdgeInsets.all(24.0),
-              child:
-                  QuillEditor.basic(controller: _controller, readOnly: false),
+              child: QuillEditor(
+                autoFocus: false,
+                scrollController: ScrollController(),
+                padding: EdgeInsets.zero,
+                expands: true,
+                scrollable: true,
+                focusNode: FocusNode(),
+                controller: _controller,
+                readOnly: true,
+              ),
             ))
           ],
         ),
