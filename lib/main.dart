@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+import 'app.dart';
+import 'data/models/models.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(DiaryAdapter());
+  Hive.registerAdapter(EntryAdapter());
   runApp(const App());
 }

@@ -11,7 +11,7 @@ class RoundedTextFieldWithColor extends StatefulWidget {
   }) : super(key: key);
   final Color selectedColor;
   final TextEditingController controller;
-  final Function(MaterialColor) onColorSelected;
+  final Function(Color) onColorSelected;
   @override
   _RoundedTextFieldWithColorState createState() =>
       _RoundedTextFieldWithColorState();
@@ -61,7 +61,7 @@ class _RoundedTextFieldWithColorState extends State<RoundedTextFieldWithColor> {
                         setState(() {
                           _selectedColor = color;
                         });
-                        widget.onColorSelected(color as MaterialColor);
+                        widget.onColorSelected(color);
                         Navigator.of(context).pop();
                       }),
                 ),

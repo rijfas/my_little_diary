@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_little_diary/data/models/diary.dart';
+import 'package:my_little_diary/data/models/models.dart';
 import 'package:my_little_diary/presentation/screens/entry_create_screen/entry_create_screen.dart';
 import 'package:my_little_diary/presentation/screens/entry_list_screen/entry_list_screen.dart';
 import 'package:my_little_diary/presentation/screens/entry_view_screen/entry_view_screen.dart';
@@ -23,9 +24,19 @@ class AppRouter {
           ),
         );
       case entryCreateScreen:
-        return MaterialPageRoute(builder: (_) => const EntryCreateScreen());
+        return MaterialPageRoute(
+            builder: (_) => EntryCreateScreen(
+                  diary: settings.arguments as Diary,
+                ));
       case entryViewScreen:
-        return MaterialPageRoute(builder: (_) => const EntryViewScreen());
+        return MaterialPageRoute(builder: (_) {
+          if (settings.arguments == null) throw Exception('Invalid Arguments');
+          final arguments = settings.arguments as Map<String, dynamic>;
+          return EntryViewScreen(
+            diary: arguments['diary'] as Diary,
+            entry: arguments['entry'] as Entry,
+          );
+        });
       default:
         throw Exception('Invalid Route Reached');
     }

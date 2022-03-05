@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_little_diary/logic/diary/diary_cubit.dart';
 import 'package:my_little_diary/presentation/router/app_router.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/diary.dart';
 import '../../../data/models/entry.dart';
 import '../../components/components.dart' show EntryTile;
@@ -14,20 +15,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final diaries = <Diary>[
-    Diary(id: '1', createdAt: DateTime.now(), title: 'Test', color: Colors.blue)
-  ];
   final entries = <Entry>[
     Entry(
-        id: '1',
-        diaryId: '1',
-        title: 'First Entry',
-        createdAt: DateTime.now(),
-        data: 'Bla bla')
+      id: '1',
+      diaryId: '1',
+      title: 'First Entry',
+      createdAt: DateTime.now(),
+      data: 'Bla bla',
+      color: Colors.blue,
+    )
   ];
   @override
   void initState() {
-    // context.read<DiaryCubit>().loadDiaries();
+    context.read<DiaryCubit>().loadDiaries();
     super.initState();
   }
 
@@ -50,23 +50,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 const BoldHeaderText(text: 'Diaries'),
                 Expanded(
                   flex: 1,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: diaries.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == (diaries.length)) {
-                        return DiaryCreateButton(
-                          onDiaryCreated: (title, color) {
-                            print(title + '$color');
+                  child: BlocBuilder<DiaryCubit, DiaryState>(
+                    builder: (context, state) {
+                      if (state is DiaryLoaded) {
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.diaries.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == (state.diaries.length)) {
+                              return DiaryCreateButton(
+                                onDiaryCreated: (title, color) => context
+                                    .read<DiaryCubit>()
+                                    .createDiary(title: title, color: color),
+                              );
+                            }
+                            return DiaryIcon(
+                              diary: state.diaries[index],
+                              onTap: () => Navigator.of(context).pushNamed(
+                                AppRouter.entryListScreen,
+                                arguments: state.diaries[index],
+                              ),
+                            );
                           },
                         );
                       }
-                      return DiaryIcon(
-                        diary: diaries[index],
-                        onTap: () => Navigator.of(context).pushNamed(
-                          AppRouter.entryListScreen,
-                          arguments: diaries[index],
-                        ),
+
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     },
                   ),

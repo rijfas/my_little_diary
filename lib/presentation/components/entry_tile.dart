@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/themes/app_theme.dart';
-import '../../../../data/models/entry.dart';
+import '../../core/themes/app_theme.dart';
+import '../../data/models/entry.dart';
 
 class EntryTile extends StatelessWidget {
   const EntryTile({

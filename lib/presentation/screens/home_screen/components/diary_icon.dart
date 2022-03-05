@@ -35,7 +35,7 @@ class DiaryIcon extends StatelessWidget {
                             offset: Offset(1, 1),
                             blurRadius: 4.0)
                       ],
-                      color: diary.color[100],
+                      color: diary.color[50],
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(10.0),
                         bottomRight: Radius.circular(10.0),

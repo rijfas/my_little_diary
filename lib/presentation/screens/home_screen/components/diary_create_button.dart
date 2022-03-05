@@ -8,14 +8,14 @@ class DiaryCreateButton extends StatelessWidget {
     Key? key,
     required this.onDiaryCreated,
   }) : super(key: key);
-  final void Function(String title, MaterialColor color) onDiaryCreated;
+  final void Function(String title, Color color) onDiaryCreated;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         final _controller = TextEditingController();
-        MaterialColor _selectedColor = Colors.blue;
+        Color _selectedColor = Colors.blue;
         showDialog(
             context: context,
             builder: (context) => AlertDialog(

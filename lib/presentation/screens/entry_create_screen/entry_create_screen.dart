@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:my_little_diary/data/models/diary.dart';
 
 import '../../../core/themes/app_theme.dart';
 
 class EntryCreateScreen extends StatefulWidget {
-  const EntryCreateScreen({Key? key}) : super(key: key);
+  const EntryCreateScreen({Key? key, required this.diary}) : super(key: key);
+  final Diary diary;
 
   @override
   State<EntryCreateScreen> createState() => _EntryCreateScreenState();
@@ -14,20 +16,32 @@ class EntryCreateScreen extends StatefulWidget {
 
 class _EntryCreateScreenState extends State<EntryCreateScreen> {
   late final QuillController _controller;
-  String _title = 'Saturday';
+  late final TextEditingController _textEditingController;
   DateTime _date = DateTime.now();
   @override
   void initState() {
+    const days = <String>[
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
     super.initState();
     _controller = QuillController(
       document: Document(),
       selection: const TextSelection.collapsed(offset: 0),
     );
+    _textEditingController =
+        TextEditingController(text: days[DateTime.now().weekday - 1]);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -52,8 +66,11 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        _title,
+                      EditableText(
+                        controller: _textEditingController,
+                        backgroundCursorColor: Colors.blue,
+                        cursorColor: Colors.blue,
+                        focusNode: FocusNode(),
                         style: const TextStyle(
                             color: AppTheme.lightPrimaryColor,
                             fontWeight: FontWeight.bold,
