@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_little_diary/logic/diary/diary_cubit.dart';
+import 'package:my_little_diary/logic/entry/entry_cubit.dart';
 import 'package:my_little_diary/presentation/router/app_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../data/models/diary.dart';
 import '../../../data/models/entry.dart';
 import '../../components/components.dart' show EntryTile;
 import 'components/components.dart';
@@ -15,19 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final entries = <Entry>[
-    Entry(
-      id: '1',
-      diaryId: '1',
-      title: 'First Entry',
-      createdAt: DateTime.now(),
-      data: 'Bla bla',
-      color: Colors.blue,
-    )
-  ];
   @override
   void initState() {
     context.read<DiaryCubit>().loadDiaries();
+    context.read<EntryCubit>().loadRecentEntries();
     super.initState();
   }
 
@@ -84,12 +75,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 const BoldHeaderText(text: 'Recent Entries'),
                 Expanded(
                   flex: 2,
-                  child: ListView.builder(
-                    itemCount: entries.length,
-                    itemBuilder: (context, index) {
-                      return EntryTile(
-                        entry: entries[index],
-                        onOpen: (entry) => print,
+                  child: BlocBuilder<EntryCubit, EntryState>(
+                    builder: (context, state) {
+                      if (state is EntryLoaded) {
+                        return ListView.builder(
+                          itemCount: state.entries.length,
+                          itemBuilder: (context, index) {
+                            return EntryTile(
+                              entry: state.entries[index],
+                              onOpen: (entry) => print,
+                            );
+                          },
+                        );
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     },
                   ),

@@ -8,10 +8,8 @@ class EntryTile extends StatelessWidget {
     Key? key,
     required this.entry,
     required this.onOpen,
-    this.color = Colors.blue,
   }) : super(key: key);
   final Entry entry;
-  final Color color;
   final void Function(Entry entry) onOpen;
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,7 @@ class EntryTile extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-                color: color, borderRadius: BorderRadius.circular(5.0)),
+                color: entry.color, borderRadius: BorderRadius.circular(5.0)),
             width: 12.0,
             height: 40.0,
           ),

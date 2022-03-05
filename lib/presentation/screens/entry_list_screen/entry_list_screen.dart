@@ -1,65 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:my_little_diary/logic/diary/diary_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../core/themes/app_theme.dart';
 import '../../../data/models/models.dart';
+import '../../../logic/diary/diary_cubit.dart';
+import '../../../logic/entry/entry_cubit.dart';
 import '../../components/components.dart' show EntryTile;
 import '../../router/app_router.dart';
 
-class EntryListScreen extends StatelessWidget {
+class EntryListScreen extends StatefulWidget {
   const EntryListScreen({Key? key, required this.diary}) : super(key: key);
   final Diary diary;
 
   @override
+  State<EntryListScreen> createState() => _EntryListScreenState();
+}
+
+class _EntryListScreenState extends State<EntryListScreen> {
+  @override
+  void initState() {
+    context.read<EntryCubit>().loadEntries(diaryId: widget.diary.id);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final entries = <Entry>[
-      Entry(
-        id: '1',
-        diaryId: '1',
-        title: 'First Entry',
-        createdAt: DateTime.now(),
-        data: 'Bla bla',
-        color: Colors.blue,
-      )
-    ];
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(
-              Icons.chevron_left,
-              color: AppTheme.lightDisabledColor,
-            )),
-        title: Text(diary.title),
-        actions: [
-          PopupMenuButton(
-            elevation: 0.0,
-            icon: const Icon(
-              Icons.more_vert_outlined,
-              color: AppTheme.lightDisabledColor,
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: () {
-                  context.read<DiaryCubit>().removeDiary(id: diary.id);
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Delete'),
-              )
-            ],
-          )
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: entries.length,
-        itemBuilder: (context, index) =>
-            EntryTile(entry: entries[index], onOpen: (_) => {}),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.create),
-        backgroundColor: AppTheme.lightPrimaryColor,
-        onPressed: () => Navigator.of(context)
-            .pushNamed(AppRouter.entryCreateScreen, arguments: diary),
+    return WillPopScope(
+      onWillPop: () async {
+        print('called');
+        await context.read<EntryCubit>().loadRecentEntries();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                context.read<EntryCubit>().loadRecentEntries();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                Icons.chevron_left,
+                color: AppTheme.lightDisabledColor,
+              )),
+          title: Text(widget.diary.title),
+          actions: [
+            PopupMenuButton(
+              elevation: 0.0,
+              icon: const Icon(
+                Icons.more_vert_outlined,
+                color: AppTheme.lightDisabledColor,
+              ),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<DiaryCubit>().removeDiary(id: widget.diary.id);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Delete'),
+                )
+              ],
+            )
+          ],
+        ),
+        body: BlocBuilder<EntryCubit, EntryState>(
+          builder: (context, state) {
+            if (state is EntryLoaded) {
+              return ListView.builder(
+                itemCount: state.entries.length,
+                itemBuilder: (context, index) => EntryTile(
+                    entry: state.entries[index],
+                    onOpen: (entry) => Navigator.of(context)
+                            .pushNamed(AppRouter.entryViewScreen, arguments: {
+                          'entry': entry,
+                          'diary': widget.diary,
+                        })),
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.create),
+          backgroundColor: AppTheme.lightPrimaryColor,
+          onPressed: () => Navigator.of(context)
+              .pushNamed(AppRouter.entryCreateScreen, arguments: widget.diary),
+        ),
       ),
     );
   }

@@ -13,6 +13,7 @@ class AppRouter {
   static const entryListScreen = 'entry-list-screen';
   static const entryCreateScreen = 'entry-create-screen';
   static const entryViewScreen = 'entry-view-screen';
+  static const entryEditScreen = 'entry-edit-screen';
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homeScreen:
@@ -33,6 +34,15 @@ class AppRouter {
           if (settings.arguments == null) throw Exception('Invalid Arguments');
           final arguments = settings.arguments as Map<String, dynamic>;
           return EntryViewScreen(
+            diary: arguments['diary'] as Diary,
+            entry: arguments['entry'] as Entry,
+          );
+        });
+      case entryEditScreen:
+        return MaterialPageRoute(builder: (_) {
+          if (settings.arguments == null) throw Exception('Invalid Arguments');
+          final arguments = settings.arguments as Map<String, dynamic>;
+          return EntryCreateScreen(
             diary: arguments['diary'] as Diary,
             entry: arguments['entry'] as Entry,
           );

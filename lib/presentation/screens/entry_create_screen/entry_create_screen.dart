@@ -3,13 +3,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:my_little_diary/data/models/diary.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_little_diary/data/models/models.dart';
+import 'package:my_little_diary/logic/entry/entry_cubit.dart';
 
 import '../../../core/themes/app_theme.dart';
 
 class EntryCreateScreen extends StatefulWidget {
-  const EntryCreateScreen({Key? key, required this.diary}) : super(key: key);
+  const EntryCreateScreen({Key? key, required this.diary, this.entry})
+      : super(key: key);
   final Diary diary;
-
+  final Entry? entry;
   @override
   State<EntryCreateScreen> createState() => _EntryCreateScreenState();
 }
@@ -17,7 +21,7 @@ class EntryCreateScreen extends StatefulWidget {
 class _EntryCreateScreenState extends State<EntryCreateScreen> {
   late final QuillController _controller;
   late final TextEditingController _textEditingController;
-  DateTime _date = DateTime.now();
+  late final _date;
   @override
   void initState() {
     const days = <String>[
@@ -30,12 +34,17 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
       'Sunday'
     ];
     super.initState();
+    _date = widget.entry == null ? DateTime.now() : widget.entry!.createdAt;
     _controller = QuillController(
-      document: Document(),
+      document: widget.entry == null
+          ? Document()
+          : Document.fromJson(jsonDecode(widget.entry!.data)),
       selection: const TextSelection.collapsed(offset: 0),
     );
-    _textEditingController =
-        TextEditingController(text: days[DateTime.now().weekday - 1]);
+    _textEditingController = TextEditingController(
+        text: widget.entry == null
+            ? days[DateTime.now().weekday - 1]
+            : widget.entry!.title);
   }
 
   @override
@@ -90,6 +99,21 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                   onPressed: () {
                     final data =
                         jsonEncode(_controller.document.toDelta().toJson());
+                    if (widget.entry == null) {
+                      context.read<EntryCubit>().addEntry(
+                          diary: widget.diary,
+                          title: _textEditingController.value.text,
+                          data: data);
+                    } else {
+                      context.read<EntryCubit>().editEntry(
+                            diary: widget.diary,
+                            oldEntry: widget.entry!,
+                            title: _textEditingController.value.text,
+                            data: data,
+                          );
+                    }
+
+                    Navigator.of(context).pop();
                   },
                   child: const Text('Save'),
                 )

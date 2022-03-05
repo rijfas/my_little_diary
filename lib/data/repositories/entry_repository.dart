@@ -1,25 +1,40 @@
+import 'package:hive/hive.dart';
 import 'package:my_little_diary/data/models/entry.dart';
 
 class EntryRepository {
-  final _entries = <Entry>[];
-
-  Future<List<Entry>> getAllEntries() async {
-    return Future.delayed(const Duration(milliseconds: 100), () => _entries);
+  Future<List<Entry>> getRecentEntries() async {
+    final box = await Hive.openBox('entries');
+    List<Entry> entries = <Entry>[];
+    for (Entry element in box.values) {
+      entries.add(element);
+    }
+    await box.close();
+    entries.sort(((a, b) => b.createdAt.compareTo(a.createdAt)));
+    return entries.take(5).toList();
   }
 
   Future<List<Entry>> getEntries({required String diaryId}) async {
-    final entries =
-        _entries.where((element) => element.diaryId == diaryId).toList();
-    return Future.delayed(const Duration(milliseconds: 100), () => entries);
+    final box = await Hive.openBox('entries');
+    List<Entry> entries = <Entry>[];
+    for (Entry element in box.values) {
+      if (element.diaryId == diaryId) {
+        entries.add(element);
+      }
+    }
+    await box.close();
+    entries.sort(((a, b) => a.createdAt.compareTo(b.createdAt)));
+    return entries;
   }
 
   Future<void> addEntry({required Entry entry}) async {
-    _entries.add(entry);
-    return Future.delayed(const Duration(milliseconds: 100));
+    final box = await Hive.openBox('entries');
+    await box.put(entry.id, entry);
+    await box.close();
   }
 
   Future<void> removeEntry({required String id}) async {
-    _entries.removeWhere((element) => element.id == id);
-    return Future.delayed(const Duration(milliseconds: 100));
+    final box = await Hive.openBox('entries');
+    await box.delete(id);
+    await box.close();
   }
 }

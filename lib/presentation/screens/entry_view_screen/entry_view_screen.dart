@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-
+import 'package:my_little_diary/logic/entry/entry_cubit.dart';
+import 'package:my_little_diary/presentation/router/app_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/themes/app_theme.dart';
 import '../../../data/models/models.dart';
 
@@ -39,11 +41,30 @@ class _EntryViewScreenState extends State<EntryViewScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
+            Icons.chevron_left,
+            color: AppTheme.lightDisabledColor,
+          ),
+        ),
+        actions: [
+          PopupMenuButton(
+            elevation: 0.0,
             icon: const Icon(
-              Icons.chevron_left,
+              Icons.more_vert_outlined,
               color: AppTheme.lightDisabledColor,
-            )),
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                onTap: () {
+                  context.read<EntryCubit>().removeEntry(entry: widget.entry);
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Delete'),
+              )
+            ],
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -73,7 +94,12 @@ class _EntryViewScreenState extends State<EntryViewScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).pushReplacementNamed(
+                      AppRouter.entryEditScreen,
+                      arguments: {
+                        'diary': widget.diary,
+                        'entry': widget.entry
+                      }),
                   child: const Text('Edit'),
                 )
               ],
@@ -97,6 +123,7 @@ class _EntryViewScreenState extends State<EntryViewScreen> {
               expands: true,
               scrollable: true,
               focusNode: FocusNode(),
+              showCursor: false,
               controller: _controller,
               readOnly: true,
             ),
