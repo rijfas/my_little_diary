@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_little_diary/data/models/diary.dart';
 import 'package:my_little_diary/presentation/screens/entry_create_screen/entry_create_screen.dart';
 import 'package:my_little_diary/presentation/screens/entry_list_screen/entry_list_screen.dart';
 import 'package:my_little_diary/presentation/screens/entry_view_screen/entry_view_screen.dart';
@@ -16,7 +17,11 @@ class AppRouter {
       case homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case entryListScreen:
-        return MaterialPageRoute(builder: (_) => const EntryListScreen());
+        return MaterialPageRoute(
+          builder: (_) => EntryListScreen(
+            diary: settings.arguments as Diary,
+          ),
+        );
       case entryCreateScreen:
         return MaterialPageRoute(builder: (_) => const EntryCreateScreen());
       case entryViewScreen:

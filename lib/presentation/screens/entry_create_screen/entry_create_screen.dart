@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:my_little_diary/core/themes/app_theme.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_little_diary/presentation/router/app_router.dart';
+
+import '../../../core/themes/app_theme.dart';
 
 class EntryCreateScreen extends StatefulWidget {
   const EntryCreateScreen({Key? key}) : super(key: key);
@@ -55,14 +54,14 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                     children: [
                       Text(
                         _title,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppTheme.lightPrimaryColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 28.0),
                       ),
                       Text(
                         _date.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppTheme.lightDisabledColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0),

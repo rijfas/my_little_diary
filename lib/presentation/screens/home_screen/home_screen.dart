@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_little_diary/data/models/entry.dart';
+import 'package:my_little_diary/presentation/router/app_router.dart';
 
-import '../../../core/themes/app_theme.dart';
 import '../../../data/models/diary.dart';
-import 'components/diary_create_button.dart';
-import 'components/diary_icon.dart';
-import 'components/entry_tile.dart';
-import 'components/custom_search_bar.dart';
-import 'components/bold_header_text.dart';
+import '../../../data/models/entry.dart';
+import '../../components/components.dart' show EntryTile;
+import 'components/components.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -66,7 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       return DiaryIcon(
                         diary: diaries[index],
-                        onTap: () {},
+                        onTap: () => Navigator.of(context).pushNamed(
+                          AppRouter.entryListScreen,
+                          arguments: diaries[index],
+                        ),
                       );
                     },
                   ),
