@@ -5,6 +5,7 @@ import '../../../core/themes/app_theme.dart';
 import '../../../data/models/models.dart';
 import '../../../logic/diary/diary_cubit.dart';
 import '../../../logic/entry/entry_cubit.dart';
+import '../../../logic/recent_entries/recent_entries_cubit.dart';
 import '../../components/components.dart' show EntryTile;
 import '../../router/app_router.dart';
 
@@ -27,15 +28,14 @@ class _EntryListScreenState extends State<EntryListScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        print('called');
-        await context.read<EntryCubit>().loadRecentEntries();
+        await context.read<RecentEntriesCubit>().loadRecentEntries();
         return true;
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                context.read<EntryCubit>().loadRecentEntries();
+                context.read<RecentEntriesCubit>().loadRecentEntries();
                 Navigator.of(context).pop();
               },
               icon: const Icon(

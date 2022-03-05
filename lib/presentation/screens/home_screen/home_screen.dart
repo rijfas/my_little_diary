@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_little_diary/logic/diary/diary_cubit.dart';
 import 'package:my_little_diary/logic/entry/entry_cubit.dart';
+import 'package:my_little_diary/logic/recent_entries/recent_entries_cubit.dart';
 import 'package:my_little_diary/presentation/router/app_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/entry.dart';
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<DiaryCubit>().loadDiaries();
-    context.read<EntryCubit>().loadRecentEntries();
+    context.read<RecentEntriesCubit>().loadRecentEntries();
     super.initState();
   }
 
@@ -75,9 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 const BoldHeaderText(text: 'Recent Entries'),
                 Expanded(
                   flex: 2,
-                  child: BlocBuilder<EntryCubit, EntryState>(
+                  child: BlocBuilder<RecentEntriesCubit, RecentEntriesState>(
                     builder: (context, state) {
-                      if (state is EntryLoaded) {
+                      if (state is RecentEntriesLoaded) {
                         return ListView.builder(
                           itemCount: state.entries.length,
                           itemBuilder: (context, index) {

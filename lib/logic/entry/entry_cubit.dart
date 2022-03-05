@@ -16,12 +16,6 @@ class EntryCubit extends Cubit<EntryState> {
     emit(EntryLoaded(entries: entries));
   }
 
-  Future<void> loadRecentEntries() async {
-    emit(EntryLoading());
-    final entries = await entryRepository.getRecentEntries();
-    emit(EntryLoaded(entries: entries));
-  }
-
   void addEntry(
       {required Diary diary, required String title, required String data}) {
     const uuid = Uuid();
