@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_little_diary/core/themes/app_theme.dart';
+import 'package:my_little_diary/logic/search_entries/search_entries_bloc.dart';
+import 'package:my_little_diary/presentation/components/components.dart';
+import 'package:my_little_diary/presentation/router/app_router.dart';
 import 'package:my_little_diary/presentation/screens/home_screen/components/custom_search_bar.dart';
 
 class EntrySearchScreen extends StatefulWidget {
@@ -11,6 +15,7 @@ class EntrySearchScreen extends StatefulWidget {
 
 class _EntrySearchScreenState extends State<EntrySearchScreen> {
   late final TextEditingController _textEditingController;
+
   bool _showClearButton = false;
 
   @override
@@ -42,10 +47,14 @@ class _EntrySearchScreenState extends State<EntrySearchScreen> {
             if (value != '') {
               setState(() {
                 _showClearButton = true;
+                context
+                    .read<SearchEntriesBloc>()
+                    .add(SearchStarted(query: value));
               });
             } else {
               setState(() {
                 _showClearButton = false;
+                context.read<SearchEntriesBloc>().add(SearchCleared());
               });
             }
           },
@@ -62,6 +71,7 @@ class _EntrySearchScreenState extends State<EntrySearchScreen> {
           if (_showClearButton)
             IconButton(
                 onPressed: () {
+                  context.read<SearchEntriesBloc>().add(SearchCleared());
                   _textEditingController.clear();
                   setState(() {
                     _showClearButton = false;
@@ -73,7 +83,27 @@ class _EntrySearchScreenState extends State<EntrySearchScreen> {
                 ))
         ],
       ),
-      body: Container(),
+      body: BlocBuilder<SearchEntriesBloc, SearchEntriesState>(
+          builder: ((context, state) {
+        if (state is SearchEntriesInitial) {
+          return const Text('Search...');
+        } else if (state is SearchEntriesLoaded) {
+          return ListView.builder(
+            itemCount: state.entries.length,
+            itemBuilder: (context, index) {
+              return EntryTile(
+                  entry: state.entries[index],
+                  onOpen: (entry) {
+                    Navigator.of(context).pushNamed(AppRouter.entryViewScreen,
+                        arguments: {'entry': entry});
+                  });
+            },
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      })),
     );
   }
 }

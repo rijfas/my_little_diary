@@ -12,6 +12,17 @@ class EntryRepository {
     return entries.toList();
   }
 
+  Future<List<Entry>> getEntriesLike({required String pattern}) async {
+    final box = await Hive.openBox('entries');
+    List<Entry> entries = <Entry>[];
+    for (Entry element in box.values) {
+      if (element.title.toLowerCase().contains(pattern.toLowerCase())) {
+        entries.add(element);
+      }
+    }
+    return entries.toList();
+  }
+
   Future<List<Entry>> getRecentEntries() async {
     final box = await Hive.openBox('entries');
     List<Entry> entries = <Entry>[];

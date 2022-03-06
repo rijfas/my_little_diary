@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_little_diary/logic/search_entries/search_entries_bloc.dart';
 
 import 'core/themes/app_theme.dart';
 import 'data/repositories/diary_repository.dart';
@@ -34,6 +35,11 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => RecentEntriesCubit(
+              entryRepository: context.read<EntryRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SearchEntriesBloc(
               entryRepository: context.read<EntryRepository>(),
             ),
           ),
