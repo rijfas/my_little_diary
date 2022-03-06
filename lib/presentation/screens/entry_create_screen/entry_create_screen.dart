@@ -1,18 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:my_little_diary/data/models/diary.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_little_diary/data/models/models.dart';
-import 'package:my_little_diary/logic/entry/entry_cubit.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
 
 import '../../../core/themes/app_theme.dart';
+import '../../../data/models/models.dart';
+import '../../../logic/entry/entry_cubit.dart';
 
 class EntryCreateScreen extends StatefulWidget {
-  const EntryCreateScreen({Key? key, required this.diary, this.entry})
-      : super(key: key);
-  final Diary diary;
+  const EntryCreateScreen({
+    Key? key,
+    this.diary,
+    this.entry,
+  }) : super(key: key);
+  final Diary? diary;
   final Entry? entry;
   @override
   State<EntryCreateScreen> createState() => _EntryCreateScreenState();
@@ -21,7 +23,7 @@ class EntryCreateScreen extends StatefulWidget {
 class _EntryCreateScreenState extends State<EntryCreateScreen> {
   late final QuillController _controller;
   late final TextEditingController _textEditingController;
-  late final _date;
+  late final DateTime _date;
   @override
   void initState() {
     const days = <String>[
@@ -101,12 +103,12 @@ class _EntryCreateScreenState extends State<EntryCreateScreen> {
                         jsonEncode(_controller.document.toDelta().toJson());
                     if (widget.entry == null) {
                       context.read<EntryCubit>().addEntry(
-                          diary: widget.diary,
+                          diary: widget.diary!,
                           title: _textEditingController.value.text,
                           data: data);
                     } else {
                       context.read<EntryCubit>().editEntry(
-                            diary: widget.diary,
+                            // diary: widget.diary,
                             oldEntry: widget.entry!,
                             title: _textEditingController.value.text,
                             data: data,

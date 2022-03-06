@@ -3,6 +3,13 @@ import 'package:hive/hive.dart';
 import '../models/diary.dart';
 
 class DiaryRepository {
+  Future<Diary> getDiary({required String diaryId}) async {
+    final Box box = await Hive.openBox('diaries');
+    final diary = await box.get(diaryId);
+    await box.close();
+    return diary;
+  }
+
   Future<List<Diary>> getAllDiaries() async {
     final Box box = await Hive.openBox('diaries');
     List<Diary> diaries = <Diary>[];

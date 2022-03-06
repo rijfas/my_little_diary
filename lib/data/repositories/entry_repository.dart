@@ -2,6 +2,16 @@ import 'package:hive/hive.dart';
 import 'package:my_little_diary/data/models/entry.dart';
 
 class EntryRepository {
+  Future<List<Entry>> getAllEntries() async {
+    final box = await Hive.openBox('entries');
+    List<Entry> entries = <Entry>[];
+    for (Entry element in box.values) {
+      entries.add(element);
+    }
+    await box.close();
+    return entries.toList();
+  }
+
   Future<List<Entry>> getRecentEntries() async {
     final box = await Hive.openBox('entries');
     List<Entry> entries = <Entry>[];

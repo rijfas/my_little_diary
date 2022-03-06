@@ -9,9 +9,12 @@ import '../../../core/themes/app_theme.dart';
 import '../../../data/models/models.dart';
 
 class EntryViewScreen extends StatefulWidget {
-  const EntryViewScreen({Key? key, required this.diary, required this.entry})
-      : super(key: key);
-  final Diary diary;
+  const EntryViewScreen({
+    Key? key,
+    // required this.diary,
+    required this.entry,
+  }) : super(key: key);
+  // final Diary diary;
   final Entry entry;
 
   @override
@@ -93,15 +96,24 @@ class _EntryViewScreenState extends State<EntryViewScreen> {
                     ],
                   ),
                 ),
-                ElevatedButton(
+                IconButton(
                   onPressed: () => Navigator.of(context).pushReplacementNamed(
                       AppRouter.entryEditScreen,
                       arguments: {
-                        'diary': widget.diary,
+                        // 'diary': widget.diary,
                         'entry': widget.entry
                       }),
-                  child: const Text('Edit'),
-                )
+                  icon: Icon(
+                    Icons.edit,
+                    color: AppTheme.lightPrimaryColor,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red[400],
+                    ))
               ],
             ),
           ),

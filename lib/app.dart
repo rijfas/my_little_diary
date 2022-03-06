@@ -29,6 +29,7 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => EntryCubit(
               entryRepository: context.read<EntryRepository>(),
+              diaryRepository: context.read<DiaryRepository>(),
             ),
           ),
           BlocProvider(
@@ -38,6 +39,7 @@ class App extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           onGenerateRoute: AppRouter.onGenerateRoute,
           initialRoute: AppRouter.homeScreen,
           theme: AppTheme.lightTheme,
