@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_little_diary/data/repositories/settings_repository.dart';
 import 'package:my_little_diary/logic/search_entries/search_entries_bloc.dart';
+import 'package:my_little_diary/logic/settings/settings_cubit.dart';
 
 import 'core/themes/app_theme.dart';
 import 'data/repositories/diary_repository.dart';
@@ -19,6 +21,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (_) => DiaryRepository()),
         RepositoryProvider(create: (_) => EntryRepository()),
+        RepositoryProvider(create: (_) => SettingsRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -41,6 +44,11 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => SearchEntriesBloc(
               entryRepository: context.read<EntryRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SettingsCubit(
+              settingsRepository: context.read<SettingsRepository>(),
             ),
           ),
         ],

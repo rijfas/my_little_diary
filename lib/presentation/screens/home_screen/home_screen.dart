@@ -28,16 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.settings,
-          color: AppTheme.lightDisabledColor,
+        leading: IconButton(
+          onPressed: () =>
+              Navigator.of(context).pushNamed(AppRouter.settingsScreen),
+          icon: const Icon(
+            Icons.settings,
+            color: AppTheme.lightDisabledColor,
+          ),
         ),
         title: const Text('My Little Diary'),
         actions: [
           IconButton(
               onPressed: () =>
                   Navigator.of(context).pushNamed(AppRouter.entrySearchScreen),
-              icon: Icon(
+              icon: const Icon(
                 Icons.search,
                 color: AppTheme.lightDisabledColor,
               ))

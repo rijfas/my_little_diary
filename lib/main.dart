@@ -9,5 +9,6 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(DiaryAdapter());
   Hive.registerAdapter(EntryAdapter());
+  Hive.registerAdapter(SettingsAdapter());
   runApp(const App());
 }

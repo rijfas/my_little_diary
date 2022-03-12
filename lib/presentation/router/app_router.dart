@@ -5,6 +5,7 @@ import 'package:my_little_diary/presentation/screens/entry_create_screen/entry_c
 import 'package:my_little_diary/presentation/screens/entry_list_screen/entry_list_screen.dart';
 import 'package:my_little_diary/presentation/screens/entry_search_screen/entry_search_screen.dart';
 import 'package:my_little_diary/presentation/screens/entry_view_screen/entry_view_screen.dart';
+import 'package:my_little_diary/presentation/screens/settings_screen/settings_screen.dart';
 
 import '../screens/home_screen/home_screen.dart';
 
@@ -16,6 +17,8 @@ class AppRouter {
   static const entryViewScreen = 'entry-view-screen';
   static const entryEditScreen = 'entry-edit-screen';
   static const entrySearchScreen = 'entry-search-screen';
+  static const settingsScreen = 'settings-screen';
+
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homeScreen:
@@ -51,6 +54,8 @@ class AppRouter {
         });
       case entrySearchScreen:
         return MaterialPageRoute(builder: (_) => const EntrySearchScreen());
+      case settingsScreen:
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
       default:
         throw Exception('Invalid Route Reached');
     }
