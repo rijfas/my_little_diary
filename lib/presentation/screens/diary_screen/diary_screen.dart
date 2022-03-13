@@ -84,7 +84,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           backgroundColor: AppTheme.lightSecondaryColor,
                           title: const Text('Delete Diary?'),
                           content: Text(
-                              'Are you sure to delete the diary ${_diary!.title}'),
+                              'Are you sure to delete the diary "${_diary!.title}"'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(),
@@ -108,7 +108,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   Navigator.of(context).pop();
                 }
               },
-              icon: const Icon(FontAwesomeIcons.trashAlt),
+              icon: const Icon(FontAwesomeIcons.trash),
             )
         ],
       ),

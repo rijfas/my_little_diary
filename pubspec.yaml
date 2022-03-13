@@ -72,6 +72,7 @@ flutter:
   assets:
     - assets/svg/empty.svg
     - assets/svg/none.svg
+    - assets/svg/app_icon.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -101,4 +102,6 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_native_splash:
-  color: "#ff0000"
+  color: "#ffffff"
+  image: assets/app_icon.png
+  fullscreen: true

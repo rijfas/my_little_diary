@@ -39,13 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        leading: const Icon(FontAwesomeIcons.feather),
         title: const Text('My Little Diary'),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: const Icon(FontAwesomeIcons.search),
-        //   )
-        // ],
         actions: [
           AnimSearchBar(
               autoFocus: true,
