@@ -40,6 +40,7 @@ dependencies:
   uuid: ^3.0.5
   hive: ^2.0.6
   hive_flutter: ^1.1.0
+  flutter_native_splash: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -94,3 +95,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#ff0000"
