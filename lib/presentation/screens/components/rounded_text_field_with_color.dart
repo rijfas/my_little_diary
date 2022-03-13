@@ -37,7 +37,13 @@ class _RoundedTextFieldWithColorState extends State<RoundedTextFieldWithColor> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
+            child: TextFormField(
+                validator: ((value) {
+                  if (value != null && value.isNotEmpty) {
+                    return null;
+                  }
+                  return 'Enter a title';
+                }),
                 controller: widget.controller,
                 decoration: const InputDecoration(
                   hintText: 'Enter title',

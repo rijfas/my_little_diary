@@ -19,7 +19,15 @@ class DiaryBloc extends Bloc<DiaryEvent, DiaryState> {
       add(LoadDiaries());
     });
 
+    on<SearchDiary>((event, emit) async {
+      emit(DiaryLoading());
+      final diaries =
+          await diaryRepository.getAllDiariesLike(pattern: event.query);
+      emit(DiaryLoaded(diaries: diaries));
+    });
+
     on<RemoveDiary>((event, emit) async {
+      emit(DiaryLoading());
       await diaryRepository.removeDiary(event.diary);
       add(LoadDiaries());
     });

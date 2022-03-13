@@ -6,6 +6,18 @@ class DiaryRepository {
     final box = await Hive.openBox('diaries');
     final List<Diary> diaries = box.values.map((e) => e as Diary).toList();
     await box.close();
+    diaries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return diaries;
+  }
+
+  Future<List<Diary>> getAllDiariesLike({required String pattern}) async {
+    final box = await Hive.openBox('diaries');
+    final List<Diary> diaries = box.values
+        .map((e) => e as Diary)
+        .where((element) =>
+            element.title.toLowerCase().contains(pattern.toLowerCase()))
+        .toList();
+
     return diaries;
   }
 

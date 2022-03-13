@@ -13,3 +13,8 @@ class RemoveDiary extends DiaryEvent {
   final Diary diary;
   RemoveDiary({required this.diary});
 }
+
+class SearchDiary extends DiaryEvent {
+  final String query;
+  SearchDiary({required this.query});
+}
