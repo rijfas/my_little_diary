@@ -47,7 +47,7 @@ Check it yourself :)
 ```
 Copyright © 2021 Rijfas Usman
 
-BlackHole is a free software licensed under GPL v3.0
+My Little Diary is a free software licensed under GPL v3.0
 It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
